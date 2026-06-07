@@ -5,6 +5,6 @@ project:
   toc:
     - file: index.md
     - file: content/introduction.md
-    - file: content/1_intro.md
-    # - file: content/2_geometric.md
+    # - file: content/1_intro.md
+    - file: content/2_geometric.md
     - file: content/conclusion.md

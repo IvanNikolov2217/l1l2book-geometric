@@ -64,10 +64,10 @@ The loss function measures how well a set of weights fits the training data. We 
 \min_{w_1,\, w_2} \;\mathcal{L}(w_1, w_2)
 ```
 
-The contours are typically ellipses centered on the **unregularized optimum** $\hat{w}$ — the point that fits the training data best with no restrictions on weight size.
+The contours are centered on the **unregularized optimum** $\hat{w}$ — the point that fits the training data best with no restrictions on weight size.
 
 :::{note} Reading a contour plot
-Each ellipse is one "elevation" of training error. The center has the lowest error. Moving outward, each ellipse marks a higher error level. The unregularized solution sits at the center; any regularized solution will be pulled away from it toward the origin.
+Each contour is one "elevation" of training error. The center has the lowest error. Moving outward, each ring marks a higher error level. The unregularized solution sits at the center; any regularized solution will be pulled away from it toward the origin.
 :::
 
 <iframe src="https://ivannikolov2217.github.io/widgets/widget-loss-contours(1).html" width="100%" height="520" frameborder="0" scrolling="no"></iframe>
@@ -117,11 +117,11 @@ This is a **circle** centered at the origin. Every point inside the circle satis
 \min_{w_1,\, w_2} \;\mathcal{L}(w_1, w_2) \;+\; \lambda\,(w_1^2 + w_2^2)
 ```
 
-The regularized solution is the point where the smallest possible loss ellipse first touches the circle.
+The regularized solution is the point where the smallest possible loss contour first touches the circle.
 
-<iframe src="https://ivannikolov2217.github.io/widgets/widget-region-l2(1).html" width="100%" height="480" style="border:0; display:block; background:transparent;" scrolling="no"></iframe>
+<iframe src="https://ivannikolov2217.github.io/widgets/widget-region-l2(1).html" width="100%" height="520" frameborder="0" scrolling="no"></iframe>
 
-**Observe:** A circle is smooth — it has no special points on the axes. The loss ellipse can touch the circle almost anywhere, and in general it does so at a point where both $w_1 \neq 0$ and $w_2 \neq 0$.
+**Observe:** A circle is smooth — it has no special points on the axes. The loss contour can touch the circle almost anywhere, and in general it does so at a point where both $w_1 \neq 0$ and $w_2 \neq 0$.
 
 ```{math}
 w_1 \neq 0, \quad w_2 \neq 0
@@ -146,7 +146,7 @@ The L1 constraint region is defined by:
 |w_1| + |w_2| \leq c
 ```
 
-This forms a **diamond** (a square rotated 45°) centered at the origin. The regularized solution is again the point where the smallest loss ellipse first touches the boundary.
+This forms a **diamond** (a square rotated 45°) centered at the origin. The regularized solution is again the point where the smallest loss contour first touches the boundary.
 
 ```{math}
 :label: lasso-penalty
@@ -155,17 +155,17 @@ This forms a **diamond** (a square rotated 45°) centered at the origin. The reg
 
 The critical difference from L2 is that the diamond has **sharp corners**, and those corners lie exactly on the axes — at points like $(c,\ 0)$, $(-c,\ 0)$, $(0,\ c)$, and $(0,\ -c)$.
 
-When the loss ellipse sweeps inward from the unregularized optimum, it is geometrically likely to first touch one of these corners. At a corner on the horizontal axis, $w_2 = 0$ exactly. At a corner on the vertical axis, $w_1 = 0$ exactly.
+When the loss contour sweeps inward from the unregularized optimum, it is geometrically likely to first touch one of these corners. The reason is that the corners stick out furthest along the axes: an incoming contour reaches a protruding corner before it reaches the flatter edges between corners, unless the optimum happens to be oriented so that an edge is reached first. At a corner on the horizontal axis, $w_2 = 0$ exactly. At a corner on the vertical axis, $w_1 = 0$ exactly.
 
 ```{math}
 w_1 = 0 \quad \text{or} \quad w_2 = 0
 ```
 
+<iframe src="https://ivannikolov2217.github.io/widgets/widget-region-l1(1).html" width="100%" height="520" frameborder="0" scrolling="no"></iframe>
+
 :::{note} Why does the absolute value create corners?
 The absolute value function $|w|$ has a sharp kink at $w = 0$ — its derivative is $-1$ for negative values and $+1$ for positive values, with no defined derivative at zero. This kink is what creates the corners of the diamond. It is also why Lasso cannot be minimized analytically — the loss surface is not smooth everywhere.
 :::
-
-<iframe src="https://ivannikolov2217.github.io/widgets/widget-region-l1(1).html" width="100%" height="480" style="border:0; display:block; background:transparent;" scrolling="no"></iframe>
 
 **Observe:** The closer the unregularized optimum is to one of the axes, the more likely the loss contour is to hit a corner first. In practice, with many features, some of them genuinely unimportant, this happens frequently — Lasso naturally zeroes out the weights that contribute least.
 
@@ -175,17 +175,23 @@ The absolute value function $|w|$ has a sharp kink at $w = 0$ — its derivative
 
 _The shape determines the behaviour_
 
-<iframe src="https://ivannikolov2217.github.io/widgets/widget-constraint-region(1).html" width="100%" height="560" style="border:0; display:block; background:transparent;" scrolling="no"></iframe>
+The interactive explorer below brings everything together. Toggle between the Ridge circle and the Lasso diamond, move the unregularized optimum around its path with the position slider, and grow the loss contour with the λ slider. Watch where the contour touches the boundary: on the circle it lands off-axis, while on the diamond it tends to snap to a corner — setting one weight to exactly zero.
+
+<iframe src="https://ivannikolov2217.github.io/widgets/widget-constraint-region(1).html" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+
+:::{tip} Try it: Constraint Region Explorer
+Move the optimum close to one of the axes and switch to Lasso — notice how readily the touch point lands on a corner (the path turns green). Then switch to Ridge from the same position and watch the touch point stay off the axis (the path stays yellow).
+:::
 
 The entire difference between Ridge and Lasso comes down to the shape of the constraint region.
 
-| Property                     | L2 — Ridge               | L1 — Lasso                                      |
-| :--------------------------- | :----------------------- | :---------------------------------------------- |
-| **Constraint region**        | Circle — smooth boundary | Diamond — sharp corners on axes                 |
-| **Where the solution lands** | Anywhere on the boundary | Often at a corner                               |
-| **Weights at the solution**  | Both small, neither zero | One or more exactly zero                        |
-| **Effect**                   | Shrinks all weights      | Eliminates some weights entirely                |
-| **Also known as**            | Tikhonov regression      | Least Absolute Shrinkage and Selection Operator |
+| Property                     | L2 — Ridge                     | L1 — Lasso                                      |
+| :--------------------------- | :----------------------------- | :---------------------------------------------- |
+| **Constraint region**        | Circle — smooth boundary       | Diamond — sharp corners on axes                 |
+| **Where the solution lands** | Off-axis point on the boundary | Often at a corner                               |
+| **Weights at the solution**  | Both small, neither zero       | One or more exactly zero                        |
+| **Effect**                   | Shrinks all weights            | Eliminates some weights entirely                |
+| **Also known as**            | Tikhonov regression            | Least Absolute Shrinkage and Selection Operator |
 
 ```{math}
 \text{L2} \;\Rightarrow\; \text{small but nonzero weights}
@@ -245,11 +251,3 @@ Both methods restrict how large the weights can be, but the shape of the restric
 | **Feature selection** | No — keeps all features                                | Yes — eliminates irrelevant features         |
 | **Best for**          | Many features that all contribute; correlated features | Many features, most of which are irrelevant  |
 | **Can be solved**     | Analytically (closed form) or gradient descent         | Gradient descent only (not analytically)     |
-
-:::{note} Elastic Net
-Elastic Net combines both penalties:
-
-$$\text{MSE} + \lambda_1 \sum w_j^2 + \lambda_2 \sum |w_j|$$
-
-Its constraint region is a **rounded diamond** — it has corners (so some weights can go to zero) but the edges are curved (so the remaining weights are also shrunk smoothly). It tries to get the best of both shapes.
-:::
