@@ -4,7 +4,7 @@ title: Conclusion
 
 ## Conclusion
 
-Congratulations — you have successfully completed the material on L1 and L2 regularization!
+Congratulations - you have successfully completed the material on L1 and L2 regularization!
 
 ### What You Covered
 
@@ -14,7 +14,7 @@ You learned that **L1 regularization (Lasso)** drives certain weights all the wa
 
 You also learned that **L2 regularization (Ridge Regression)** distributes the penalty more smoothly across all parameters rather than eliminating them. Instead of zeroing out weights, it shrinks them toward smaller values, which tends to handle correlated features gracefully and produce stable solutions.
 
-Finally, you saw that the choice between L1 and L2 is not merely technical — it has real consequences for model interpretability, generalization, and how features are selected. Understanding the differences in their mathematical formulation and resulting behavior allows you to choose the approach best suited to your problem.
+Finally, you saw that the choice between L1 and L2 is not merely technical - it has real consequences for model interpretability, generalization, and how features are selected. Understanding the differences in their mathematical formulation and resulting behavior allows you to choose the approach best suited to your problem.
 
 ### Next Steps
 
