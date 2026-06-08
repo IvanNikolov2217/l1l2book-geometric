@@ -3,26 +3,26 @@ title: Regularization - Geometric Interpretation
 subtitle: Understanding regularization through shapes and constraint regions
 ---
 
-This tutorial explains Ridge (L2) and Lasso (L1) regularization through geometry. Instead of working through numbers, we use shapes to build intuition for _why_ the two methods behave differently - and why Lasso sets weights to zero while Ridge does not. Each step builds on the last.
+This tutorial explains Ridge (L2) and Lasso (L1) regularization through geometry. Instead of working through numbers, we use shapes to build intuition for _why_ the two methods behave differently, and why Lasso sets weights to zero while Ridge does not. Each step builds on the last.
 
 ---
 
 ## Overview
 
+Throughout this tutorial we work with a model that has exactly **two weights**, $w_1$ and $w_2$. This lets us draw everything as a two-dimensional picture, and the same geometric logic applies to models with many more weights.
+
 A regularized model has two competing goals: fit the training data well, and keep the weights small. These two goals pull in opposite directions. Understanding regularization geometrically means understanding _where_ the model ends up when these two forces meet.
+
+Keeping the weights small matters because large weights are a sign of **overfitting**: a model that fits the training data closely but generalizes poorly to new data. A model free to choose any weights will often pick large ones that bend it to match every training point, capturing noise instead of the real pattern. Constraining the weights to a region around the origin limits this complexity, which is what the shapes below represent.
 
 ::::{grid} 2
 :::{card} Ridge - L2
-The allowed region for the weights is a **circle**. Its smooth boundary means the solution usually lands away from the axes - both weights are small but nonzero.
+The allowed region for the weights is a **circle**. Its smooth boundary means the solution usually lands away from the axes, so both weights are small but nonzero.
 :::
 :::{card} Lasso - L1
-The allowed region for the weights is a **diamond**. Its sharp corners lie exactly on the axes - the solution often lands where one weight is exactly zero.
+The allowed region for the weights is a **diamond**. Its sharp corners lie exactly on the axes, so the solution often lands where one weight is exactly zero.
 :::
 ::::
-
-:::{note} The running example
-Throughout this tutorial we work with a model that has exactly **two weights**, $w_1$ and $w_2$. This lets us draw everything as a two-dimensional picture. The same geometric logic applies to models with many more weights.
-:::
 
 ---
 
@@ -30,13 +30,11 @@ Throughout this tutorial we work with a model that has exactly **two weights**, 
 
 _Setting up the geometric view_
 
-To make regularization visual, imagine a model with only two weights:
+We draw our two weights as a point on a plane: the horizontal axis represents $w_1$ and the vertical axis represents $w_2$. Every point on this plane is a different model.
 
 ```{math}
 w_1 \quad \text{and} \quad w_2
 ```
-
-We can draw these as a point on a plane: the horizontal axis represents $w_1$ and the vertical axis represents $w_2$. Every point on this plane is a different model.
 
 For example:
 
@@ -46,7 +44,7 @@ For example:
 | $(0,\ 3)$ |     0 |     3 | First feature is completely ignored |
 | $(0,\ 0)$ |     0 |     0 | Neither feature has any influence   |
 
-The point $(0,\ 0)$ is the origin - the most regularized model possible, where every weight is zero. Real solutions will be somewhere between the origin and the unregularized best fit.
+The point $(0,\ 0)$ is the origin, the most regularized model possible, where every weight is zero. Real solutions will be somewhere between the origin and the unregularized best fit.
 
 :::{note} Why two weights?
 With two weights we can draw the problem as a flat picture. With three weights we would need a 3D picture, and with more than three it becomes impossible to visualize directly. The two-weight case captures all the essential geometry.
@@ -58,21 +56,27 @@ With two weights we can draw the problem as a flat picture. With three weights w
 
 _Drawing the training error as a landscape_
 
-The loss function measures how well a set of weights fits the training data. We can draw **contour lines** on our weight plane - curves that connect all points with the same loss value, like elevation lines on a map.
+The loss function measures how well a set of weights fits the training data. We can draw **contour lines** on our weight plane, curves that connect all points with the same loss value, like elevation lines on a map.
 
 ```{math}
 \min_{w_1,\, w_2} \;\mathcal{L}(w_1, w_2)
 ```
 
-The contours are centered on the **unregularized optimum** $\hat{w}$ - the point that fits the training data best with no restrictions on weight size.
+The contours are centered on the **unregularized optimum** $\hat{w}$, the point that fits the training data best with no restrictions on weight size.
 
 :::{note} Reading a contour plot
 Each contour is one "elevation" of training error. The center has the lowest error. Moving outward, each ring marks a higher error level. The unregularized solution sits at the center; any regularized solution will be pulled away from it toward the origin.
 :::
 
-![](../style/countours-image.png)
+Figure 1 shows this contour landscape, with the lowest-error point at the center.
 
-**Observe:** Without regularization, the model simply picks the center point. With regularization, it must stay within an allowed region - and the boundary of that region determines where the solution lands.
+![Figure 1: Loss contours centered on the unregularized optimum. Each ring represents a level of training error, with the lowest error at the center.](../style/countours-image.png)
+
+**Observe:** Without regularization, the model simply picks the center point of Figure 1. With regularization, it must stay within an allowed region, and the boundary of that region determines where the solution lands.
+
+:::{warning} The center is the overfit solution
+The unregularized optimum $\hat{w}$ at the center of Figure 1 is the model that overfits. It achieves the lowest training error precisely because it is free to use large weights that match the training data as closely as possible. Pulling the solution away from this center and toward the origin is exactly what reduces overfitting, at the cost of slightly higher training error.
+:::
 
 ---
 
@@ -117,11 +121,11 @@ This is a **circle** centered at the origin. Every point inside the circle satis
 \min_{w_1,\, w_2} \;\mathcal{L}(w_1, w_2) \;+\; \lambda\,(w_1^2 + w_2^2)
 ```
 
-The regularized solution is the point where the smallest possible loss contour first touches the circle.
+The regularized solution is the point where the smallest possible loss contour first touches the circle. Figure 2 shows this touch point.
 
-![](../style/l2-image.png)
+![Figure 2: The L2 (Ridge) circle. The smallest reachable loss contour touches the smooth boundary at a point where both weights are nonzero.](../style/l2-image.png)
 
-**Observe:** A circle is smooth - it has no special points on the axes. The loss contour can touch the circle almost anywhere, and in general it does so at a point where both $w_1 \neq 0$ and $w_2 \neq 0$.
+**Observe:** As Figure 2 illustrates, a circle is smooth, with no special points on the axes. The loss contour can touch the circle almost anywhere, and in general it does so at a point where both $w_1 \neq 0$ and $w_2 \neq 0$.
 
 ```{math}
 w_1 \neq 0, \quad w_2 \neq 0
@@ -146,28 +150,28 @@ The L1 constraint region is defined by:
 |w_1| + |w_2| \leq c
 ```
 
-This forms a **diamond** (a square rotated 45°) centered at the origin. The regularized solution is again the point where the smallest loss contour first touches the boundary.
+This forms a **diamond** (a square rotated 45°) centered at the origin. The regularized solution is again the point where the smallest loss contour first touches the boundary, as shown in Figure 3.
 
 ```{math}
 :label: lasso-penalty
 \min_{w_1,\, w_2} \;\mathcal{L}(w_1, w_2) \;+\; \lambda\,(|w_1| + |w_2|)
 ```
 
-![](../style/l1-image.png)
+![Figure 3: The L1 (Lasso) diamond. The smallest reachable loss contour touches a sharp corner on an axis, setting one weight to exactly zero.](../style/l1-image.png)
 
-The critical difference from L2 is that the diamond has **sharp corners**, and those corners lie exactly on the axes - at points like $(c,\ 0)$, $(-c,\ 0)$, $(0,\ c)$, and $(0,\ -c)$.
+The critical difference from L2 is that the diamond has **sharp corners**, and those corners lie exactly on the axes, at points like $(c,\ 0)$, $(-c,\ 0)$, $(0,\ c)$, and $(0,\ -c)$.
 
-When the loss contour sweeps inward from the unregularized optimum, it is geometrically likely to first touch one of these corners. The reason is that the corners stick out furthest along the axes: an incoming contour reaches a protruding corner before it reaches the flatter edges between corners, unless the optimum happens to be oriented so that an edge is reached first. At a corner on the horizontal axis, $w_2 = 0$ exactly. At a corner on the vertical axis, $w_1 = 0$ exactly.
+When the loss contour sweeps inward from the unregularized optimum, it is geometrically likely to first touch one of these corners. The corners stick out furthest along the axes. An incoming contour therefore reaches a protruding corner before it reaches the flatter edges in between. The exception is when the optimum is oriented so that an edge is reached first. At a corner on the horizontal axis, $w_2 = 0$ exactly. At a corner on the vertical axis, $w_1 = 0$ exactly.
 
 ```{math}
 w_1 = 0 \quad \text{or} \quad w_2 = 0
 ```
 
 :::{note} Why does the absolute value create corners?
-The absolute value function $|w|$ has a sharp kink at $w = 0$ - its derivative is $-1$ for negative values and $+1$ for positive values, with no defined derivative at zero. This kink is what creates the corners of the diamond. It is also why Lasso cannot be minimized analytically - the loss surface is not smooth everywhere.
+The absolute value function $|w|$ has a sharp kink at $w = 0$. Its derivative is $-1$ for negative values and $+1$ for positive values, with no defined derivative at zero. This kink is what creates the corners of the diamond. It is also why Lasso cannot be minimized analytically: the loss surface is not smooth everywhere.
 :::
 
-**Observe:** The closer the unregularized optimum is to one of the axes, the more likely the loss contour is to hit a corner first. In practice, with many features, some of them genuinely unimportant, this happens frequently - Lasso naturally zeroes out the weights that contribute least.
+**Observe:** As in Figure 3, the closer the unregularized optimum is to one of the axes, the more likely the loss contour is to hit a corner first. In practice, with many features, some of them genuinely unimportant, this happens frequently. Lasso naturally zeroes out the weights that contribute least.
 
 ---
 
@@ -175,23 +179,25 @@ The absolute value function $|w|$ has a sharp kink at $w = 0$ - its derivative i
 
 _The shape determines the behaviour_
 
-The interactive explorer below brings everything together. Toggle between the Ridge circle and the Lasso diamond, move the unregularized optimum around its path with the position slider, and grow the loss contour with the λ slider. Watch where the contour touches the boundary: on the circle it lands off-axis, while on the diamond it tends to snap to a corner - setting one weight to exactly zero.
+The interactive explorer below brings everything together. Toggle between the Ridge circle and the Lasso diamond, move the unregularized optimum around its path with the position slider, and grow the loss contour with the λ slider. Watch where the contour touches the boundary: on the circle it lands off-axis, while on the diamond it tends to snap to a corner, setting one weight to exactly zero.
 
 <iframe src="https://ivannikolov2217.github.io/widgets/widget-constraint-region(1).html" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
 
 :::{tip} Try it: Constraint Region Explorer
-Move the optimum close to one of the axes and switch to Lasso - notice how readily the touch point lands on a corner (the path turns green). Then switch to Ridge from the same position and watch the touch point stay off the axis (the path stays yellow).
+Move the optimum close to one of the axes and switch to Lasso, and notice how readily the touch point lands on a corner (the path turns green). Then switch to Ridge from the same position and watch the touch point stay off the axis (the path stays yellow).
 :::
 
 The entire difference between Ridge and Lasso comes down to the shape of the constraint region.
 
 ```{math}
-\text{L2} \;\Rightarrow\; \text{small but nonzero weights}
+\text{L2} \;\Rightarrow\; \text{dense weights (small but nonzero)}
 ```
 
 ```{math}
-\text{L1} \;\Rightarrow\; \text{sparse weights - some exactly zero}
+\text{L1} \;\Rightarrow\; \text{sparse weights (some exactly zero)}
 ```
+
+A weight vector with no zeros is called **dense**; one with many zeros is called **sparse**. These are the labels the explorer uses, so L2 produces a dense solution and L1 a sparse one.
 
 :::{important} The key geometric insight
 L2 uses a smooth shape. L1 uses a shape with corners on the axes. Corners create the possibility of exact zeros. That single geometric difference explains why Lasso performs feature selection and Ridge does not.
@@ -203,18 +209,18 @@ L2 uses a smooth shape. L1 uses a shape with corners on the axes. Corners create
 
 _The hyperparameter that controls the size of the constraint region_
 
-The parameter $\lambda$ controls how large the constraint region is allowed to be. In the constraint view, $\lambda$ maps directly to $c$ - a larger $\lambda$ corresponds to a smaller $c$, meaning the region shrinks and the weights are forced closer to the origin.
+The parameter $\lambda$ controls how large the constraint region is allowed to be. In the constraint view, $\lambda$ maps directly to $c$: a larger $\lambda$ corresponds to a smaller $c$, meaning the region shrinks and the weights are forced closer to the origin.
 
 ::::{grid} 2
 :::{card} $\lambda$ too small (near zero)
-The constraint region is very large. The solution can sit close to the unregularized optimum - the model can still overfit.
+The constraint region is very large. The solution can sit close to the unregularized optimum, and the model can still overfit.
 :::
 :::{card} $\lambda$ too large
-The constraint region shrinks toward the origin. The solution is forced so close to $(0,\ 0)$ that the model loses all predictive power - it underfits.
+The constraint region shrinks toward the origin. The solution is forced so close to $(0,\ 0)$ that the model loses all predictive power, so it underfits.
 :::
 ::::
 
-The standard approach is to try several values and evaluate each on a **validation set** - data not used during training. Choose the $\lambda$ that gives the lowest validation error.
+The standard approach is to try several values and evaluate each on a **validation set**, data not used during training. Choose the $\lambda$ that gives the lowest validation error.
 
 :::{important} The constraint only applies during training
 
@@ -223,7 +229,7 @@ $$
 $$
 
 $$
-\text{Evaluation:}\quad \text{measure } \mathcal{L}(w) \text{ only - no penalty}
+\text{Evaluation:}\quad \text{measure } \mathcal{L}(w) \text{ only, no penalty}
 $$
 
 Once the weights are learned, predictions are made using the standard formula. The regularization term is discarded.
@@ -235,11 +241,11 @@ Once the weights are learned, predictions are made using the standard formula. T
 
 Both methods restrict how large the weights can be, but the shape of the restriction leads to fundamentally different behaviour.
 
-|                       | **Ridge (L2)**                                         | **Lasso (L1)**                               |
-| --------------------- | ------------------------------------------------------ | -------------------------------------------- |
-| **Penalty**           | $\lambda \sum w_j^2$                                   | $\lambda \sum \|w_j\|$                       |
-| **Constraint shape**  | Circle - smooth                                        | Diamond - corners on axes                    |
-| **Effect on weights** | Shrinks all toward zero, none exactly zero             | Shrinks weights; sets some to _exactly_ zero |
-| **Feature selection** | No - keeps all features                                | Yes - eliminates irrelevant features         |
-| **Best for**          | Many features that all contribute; correlated features | Many features, most of which are irrelevant  |
-| **Can be solved**     | Analytically (closed form) or gradient descent         | Gradient descent only (not analytically)     |
+|                       | **Ridge (L2)**                                         | **Lasso (L1)**                                        |
+| --------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
+| **Penalty**           | $\lambda \sum w_j^2$                                   | $\lambda \sum \|w_j\|$                                |
+| **Constraint shape**  | Circle - smooth                                        | Diamond - corners on axes                             |
+| **Effect on weights** | Shrinks all toward zero, none exactly zero (dense)     | Shrinks weights; sets some to _exactly_ zero (sparse) |
+| **Feature selection** | No - keeps all features                                | Yes - eliminates irrelevant features                  |
+| **Best for**          | Many features that all contribute; correlated features | Many features, most of which are irrelevant           |
+| **Can be solved**     | Analytically (closed form) or gradient descent         | Gradient descent only (not analytically)              |
