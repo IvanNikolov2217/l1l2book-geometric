@@ -1,9 +1,9 @@
 ---
 title: Conclusion
+no-update-date: true
 ---
 
-## Conclusion
-
+\
 Congratulations - you have successfully completed the material on L1 and L2 regularization!
 
 ### What You Covered
@@ -19,3 +19,9 @@ Finally, you saw that the choice between L1 and L2 is not merely technical - it 
 ### Next Steps
 
 You have now completed all of the learning material for this section. To assess your knowledge of these concepts, you will next complete a quick posttest. Good luck!
+
+### References Used
+
+- Hastie, Tibshirani & Friedman, _The Elements of Statistical Learning_ — the regularization and shrinkage chapters.
+- DataMListic, video explainer: <https://www.youtube.com/watch?v=4qJrQ7DxAdk>
+- Terence Parr & Jeremy Howard, "How to Use Regularization to Prevent Overfitting": <https://explained.ai/regularization/>

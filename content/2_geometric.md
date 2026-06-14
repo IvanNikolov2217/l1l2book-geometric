@@ -1,8 +1,10 @@
 ---
 title: Regularization - Geometric Interpretation
 subtitle: Understanding regularization through shapes and constraint regions
+no-update-date: true
 ---
 
+\
 This tutorial explains Ridge (L2) and Lasso (L1) regularization through geometry. Instead of working through numbers, we use shapes to build intuition for _why_ the two methods behave differently, and why Lasso sets weights to zero while Ridge does not. Each step builds on the last.
 
 ---
@@ -70,7 +72,9 @@ Each contour is one "elevation" of training error. The center has the lowest err
 
 Figure 1 shows this contour landscape, with the lowest-error point at the center.
 
-![Figure 1: Loss contours centered on the unregularized optimum. Each ring represents a level of training error, with the lowest error at the center.](../style/countours-image.png)
+```{anywidget} ../plugins/loss-contours.mjs
+:css: ../style/custom.css
+```
 
 **Observe:** Without regularization, the model simply picks the center point of Figure 1. With regularization, it must stay within an allowed region, and the boundary of that region determines where the solution lands.
 
@@ -123,7 +127,9 @@ This is a **circle** centered at the origin. Every point inside the circle satis
 
 The regularized solution is the point where the smallest possible loss contour first touches the circle. Figure 2 shows this touch point.
 
-![Figure 2: The L2 (Ridge) circle. The smallest reachable loss contour touches the smooth boundary at a point where both weights are nonzero.](../style/l2-image.png)
+```{anywidget} ../plugins/l2-constraint-circle.mjs
+:css: ../style/custom.css
+```
 
 **Observe:** As Figure 2 illustrates, a circle is smooth, with no special points on the axes. The loss contour can touch the circle almost anywhere, and in general it does so at a point where both $w_1 \neq 0$ and $w_2 \neq 0$.
 
@@ -157,7 +163,9 @@ This forms a **diamond** (a square rotated 45°) centered at the origin. The reg
 \min_{w_1,\, w_2} \;\mathcal{L}(w_1, w_2) \;+\; \lambda\,(|w_1| + |w_2|)
 ```
 
-![Figure 3: The L1 (Lasso) diamond. The smallest reachable loss contour touches a sharp corner on an axis, setting one weight to exactly zero.](../style/l1-image.png)
+```{anywidget} ../plugins/l1-constraint-diamond.mjs
+:css: ../style/custom.css
+```
 
 The critical difference from L2 is that the diamond has **sharp corners**, and those corners lie exactly on the axes, at points like $(c,\ 0)$, $(-c,\ 0)$, $(0,\ c)$, and $(0,\ -c)$.
 
@@ -181,7 +189,9 @@ _The shape determines the behaviour_
 
 The interactive explorer below brings everything together. Toggle between the Ridge circle and the Lasso diamond, move the unregularized optimum around its path with the position slider, and grow the loss contour with the λ slider. Watch where the contour touches the boundary: on the circle it lands off-axis, while on the diamond it tends to snap to a corner, setting one weight to exactly zero.
 
-<iframe src="https://ivannikolov2217.github.io/widgets/widget-constraint-region(1).html" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+```{anywidget} ../plugins/constraint-region-explorer.mjs
+:css: ../style/custom.css
+```
 
 :::{tip} Try it: Constraint Region Explorer
 Move the optimum close to one of the axes and switch to Lasso, and notice how readily the touch point lands on a corner (the path turns green). Then switch to Ridge from the same position and watch the touch point stay off the axis (the path stays yellow).

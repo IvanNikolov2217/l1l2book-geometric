@@ -1,63 +1,53 @@
-@import url("./lambda-explorer-widget.css");
+/* ==========================================================================
+   Page layout & chrome
+   The widgets (constraint-region-explorer, loss-contours, l1/l2 regions) are
+   embedded into this page. Each widget is self-contained and themes itself via
+   its own .dark toggle, so this sheet only handles the surrounding page.
+   ========================================================================== */
 
+/* Pull the "skip to frontmatter" affordance to the very top of the grid flow. */
 #skip-to-frontmatter {
   margin-bottom: 0;
-  order: -2; /* Keep the original date first */
+  order: -2;
 }
 
+/* Article uses a CSS grid; the order overrides above reposition its children. */
 .article.content.article-grid {
   display: grid;
 }
 
 .updated-date-container {
-  order: -1; /* Move it visually below the date */
+  order: -1;
 }
 
-/* footer part */
-/*
- * This file adds custom CSS to improve the footer layout. It is not required
- * for use of landing-pages
- */
+/* Sticky-footer scaffold: body is a full-height column, content grows to fill,
+   footer is pinned to the bottom without overlapping. */
 html,
 body {
   height: 100%;
 }
+
 body {
   display: flex;
   flex-direction: column;
 }
 
 .article.content {
-  /* Override 100vh from myst-theme:styles/typography.css so content div
-   * doesn't push the footer offscreen.
-   */
   min-height: 0vh;
   flex-grow: 1;
   flex-shrink: 0;
   flex-basis: auto;
 }
 
+/* Footer */
 .footer {
-  /* Make footer "sticky" to page bottom (also the above flex rules), per
-   * the flexbox strategy described here:
-   * 	https://css-tricks.com/couple-takes-sticky-footer/#aa-there-is-flexbox
-   * and here:
-   *    https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/
-   * This solution does not require hardcoding a fixed footer height in the
-   * style rules.
-   */
   flex-shrink: 0;
   background: #0c2340;
   color: white;
-  padding-left: 2rem;
-  padding-right: 2rem;
-
   padding-left: 3.5rem;
   padding-right: 3.5rem;
 
-  /* Outer content grid */
   & .outer-grid {
-    /* spacer, project description, spacer, link columns, spacer */
     grid-template-columns: 3fr 3fr 4fr;
     align-items: center;
     margin-bottom: 0rem;
@@ -74,7 +64,6 @@ body {
     }
   }
 
-  /* Heading colours */
   & a,
   h1,
   h2,
@@ -91,113 +80,10 @@ body {
   }
 }
 
+/* MyST split-landing hero image: fill the panel height, keep aspect ratio. */
 .myst-landing-split-img-image img {
   height: 100%;
   width: auto;
   object-fit: contain !important;
   display: block;
-}
-
-.lambda-explorer-widget,
-.lambda-explorer-widget * {
-  box-sizing: border-box;
-}
-
-.lambda-explorer-widget {
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  margin: 20px auto;
-  padding: 16px;
-  background: #f8f8f8;
-  color: #1a1814;
-  max-width: 720px;
-  font-size: 14px;
-  border-radius: 8px;
-}
-
-.lambda-explorer-widget .lambda-caption {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #6f6b63;
-  margin-bottom: 12px;
-}
-
-.lambda-explorer-widget .lambda-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
-
-.lambda-explorer-widget .lambda-tab {
-  padding: 8px 14px;
-  border: 1px solid #aaa;
-  border-radius: 6px;
-  background: white;
-  cursor: pointer;
-  font-weight: bold;
-  font-family: inherit;
-}
-
-.lambda-explorer-widget .lambda-tab.active[data-method="ridge"] {
-  background: #1a4a8a;
-  border-color: #1a4a8a;
-  color: white;
-}
-
-.lambda-explorer-widget .lambda-tab.active[data-method="lasso"] {
-  background: #9b2335;
-  border-color: #9b2335;
-  color: white;
-}
-
-.lambda-explorer-widget .lambda-chart-wrap {
-  position: relative;
-  height: 320px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 12px;
-}
-
-.lambda-explorer-widget .lambda-chart {
-  width: 100%;
-  height: 100%;
-}
-
-.lambda-explorer-widget .lambda-insight {
-  margin-top: 14px;
-  padding: 12px 14px;
-  border-left: 4px solid #777;
-  background: white;
-  border-radius: 0 6px 6px 0;
-  line-height: 1.5;
-}
-
-.lambda-explorer-widget .lambda-ridge-insight {
-  border-left-color: #1a4a8a;
-}
-
-.lambda-explorer-widget .lambda-lasso-insight {
-  border-left-color: #9b2335;
-}
-
-.lambda-explorer-widget .lambda-note {
-  margin-top: 12px;
-  color: #6f6b63;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.lambda-explorer-widget .lambda-error {
-  color: #9b1c1c;
-  background: #fff1f1;
-  border: 1px solid #f2b8b8;
-  border-radius: 6px;
-  padding: 10px 12px;
-  margin-top: 12px;
 }

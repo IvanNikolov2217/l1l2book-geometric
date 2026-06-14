@@ -46,23 +46,6 @@ site:
     footer: style/footer.md
 
 sphinx:
-  config:
-    html_static_path: ["_static"]
-    html_css_files:
-      - test.css
-      - l1-l2-widget.css
-      - test-widget.css
-      - lambda-explorer.css
-      - lambda-explorer-widget.css
-      - regularization-slider.css
-    html_js_files:
-      - l1-l2-widget.js
-      - test-widget.js
-      - lambda-explorer.js
-      - lambda-explorer-widget.js
-      - counter.js
-      - regularization-slider.js
-
   nav:
     - title: Manual
       children:
